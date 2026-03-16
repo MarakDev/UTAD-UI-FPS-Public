@@ -9,11 +9,19 @@
 /**
  * 
  */
+class UTextBlock;
+
 UCLASS()
 class UTAD_UI_FPS_API UAmmoCounter : public UUserWidget
 {
 	GENERATED_BODY()
 public:
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	TObjectPtr<UTextBlock> CurrentAmmo;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	TObjectPtr<UTextBlock> TotalAmmo;
 
 	UFUNCTION(BlueprintCallable, Category = Visibility)
 	void Show();

@@ -9,19 +9,45 @@
 void UAmmoCounter::Show()
 {
 	SetVisibility(ESlateVisibility::HitTestInvisible);
+
+	AUTAD_UI_FPSCharacter* character = Cast<AUTAD_UI_FPSCharacter>(GetOwningPlayer()->GetCharacter());
+	if (character)
+	{
+		character->OnTotalBulletsChanged.BindUObject(this, &UAmmoCounter::UpdateTotalAmmo);
+
+		UTP_WeaponComponent* weaponComponent = character->GetAttachedWeaponComponent();
+
+		if (weaponComponent)
+		{
+			weaponComponent->OnCurrentBulletsChanged.BindUObject(this, &UAmmoCounter::UpdateCurrentAmmo);
+		}
+	}
 }
 
 void UAmmoCounter::Hide()
 {
 	SetVisibility(ESlateVisibility::Hidden);
+
+	AUTAD_UI_FPSCharacter* character = Cast<AUTAD_UI_FPSCharacter>(GetOwningPlayer()->GetCharacter());
+	if (character)
+	{
+		character->OnTotalBulletsChanged.Unbind();
+
+		UTP_WeaponComponent* weaponComponent = character->GetAttachedWeaponComponent();
+
+		if (weaponComponent)
+		{
+			weaponComponent->OnCurrentBulletsChanged.Unbind();
+		}
+	}
 }
 
 void UAmmoCounter::UpdateCurrentAmmo(int NewCurrentAmmo)
 {
-
+	CurrentAmmo->SetText(FText::AsNumber(NewCurrentAmmo));
 }
 
 void UAmmoCounter::UpdateTotalAmmo(int NewTotalAmmo)
 {
-
+	TotalAmmo->SetText(FText::AsNumber(NewTotalAmmo));
 }

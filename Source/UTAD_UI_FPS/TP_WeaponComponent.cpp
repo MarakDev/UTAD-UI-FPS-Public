@@ -84,6 +84,8 @@ void UTP_WeaponComponent::Fire()
 	}
 
 	--CurrentNumBullets;
+
+	OnCurrentBulletsChanged.ExecuteIfBound(CurrentNumBullets);
 }
 
 void UTP_WeaponComponent::StartReload()
@@ -119,6 +121,8 @@ void UTP_WeaponComponent::CompleteReload()
 	playerBullets += CurrentNumBullets;
 
 	CurrentNumBullets = __min(MagazineSize, playerBullets);
+
+	OnCurrentBulletsChanged.ExecuteIfBound(CurrentNumBullets);
 
 	Character->SetTotalBullets(playerBullets - CurrentNumBullets);
 }
@@ -197,7 +201,18 @@ void UTP_WeaponComponent::AttachWeapon(AUTAD_UI_FPSCharacter* TargetCharacter)
 	}
 
 	OnReloading.ExecuteIfBound(ReloadTimer / RELOAD_TIME);
+
+	int playerBullets = Character->GetTotalBullets();
+	playerBullets += CurrentNumBullets;
+
+	CurrentNumBullets = __min(MagazineSize, playerBullets);
+
+	OnCurrentBulletsChanged.ExecuteIfBound(CurrentNumBullets);
+
+	Character->SetTotalBullets(playerBullets - CurrentNumBullets);
+
 	Character->OnTotalBulletsChanged.ExecuteIfBound(Character->GetTotalBullets());
+	OnCurrentBulletsChanged.ExecuteIfBound(CurrentNumBullets);
 }
 
 void UTP_WeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)

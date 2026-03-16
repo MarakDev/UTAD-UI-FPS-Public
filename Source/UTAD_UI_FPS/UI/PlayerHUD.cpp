@@ -9,15 +9,25 @@
 
 void UPlayerHUD::ShowNoWeapon()
 {
-
+	AmmoCounterWidget->Hide();
+	CrosshairWidget->Hide();
+	PlayerHealthBarWidget->Show();
+	ReloadBarWidget->Hide();
 }
 
 void UPlayerHUD::ShowAll()
 {
+	AmmoCounterWidget->Show();
+	CrosshairWidget->Show();
+	PlayerHealthBarWidget->Show();
+	ReloadBarWidget->Show();
 
 }
 
 void UPlayerHUD::Hide()
 {
-
+	AmmoCounterWidget->Hide();
+	CrosshairWidget->Hide();
+	PlayerHealthBarWidget->Hide();
+	ReloadBarWidget->Hide();
 }
